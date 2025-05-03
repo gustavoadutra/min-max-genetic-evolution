@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Files created by main.py
+best_weights.pkl
+fitness_evolution.png
+move_heatmap.png
