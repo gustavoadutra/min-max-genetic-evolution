@@ -290,3 +290,83 @@ class GeneticAlgorithm:
         plt.grid(True)
         plt.savefig('fitness_evolution.png')
         plt.show()
+
+    def compare_with_baseline(self, best_weights, num_games=30):
+        """
+        Compare the evolved weights with the baseline in multiple games.
+        
+        Args:
+            best_weights: The evolved weight set to test
+            num_games: Number of games to play
+            
+        Returns:
+            Dictionary with comparison statistics
+        """
+        from connect4game import Connect4Game
+        from minmax_agent import MinMaxAgent
+        
+        print(f"\nComparing evolved agent with baseline over {num_games} games...")
+        
+        # Create agents
+        evolved_agent = MinMaxAgent(evaluation_weights=best_weights, max_depth=3)
+        baseline_agent = MinMaxAgent(evaluation_weights=self.baseline_weights, max_depth=3)
+        
+        # Statistics
+        wins_evolved = 0
+        wins_baseline = 0
+        draws = 0
+        
+        # Play games
+        for game_idx in range(num_games):
+            game = Connect4Game()
+            is_evolved_first = game_idx < (num_games // 2)
+            
+            print(f"Game {game_idx+1}/{num_games}: " + 
+                  ("Evolved goes first" if is_evolved_first else "Baseline goes first"))
+            
+            # Play until game over
+            while not game.game_over:
+                if (is_evolved_first and game.current_player == 1) or \
+                   (not is_evolved_first and game.current_player == -1):
+                    # Evolved agent's turn
+                    move = evolved_agent.choose_move(game)
+                else:
+                    # Baseline agent's turn
+                    move = baseline_agent.choose_move(game)
+                
+                if move is not None:
+                    game.make_move(move)
+            
+            # Record outcome
+            if game.winner is None:
+                draws += 1
+                print("  Result: Draw")
+            elif (game.winner == 1 and is_evolved_first) or \
+                 (game.winner == -1 and not is_evolved_first):
+                wins_evolved += 1
+                print("  Result: Evolved agent wins")
+            else:
+                wins_baseline += 1
+                print("  Result: Baseline agent wins")
+        
+        # Calculate statistics
+        win_rate = wins_evolved / num_games
+        baseline_win_rate = wins_baseline / num_games
+        draw_rate = draws / num_games  # Add this to calculate draw rate
+
+        # Print summary
+        print("\nComparison Results:")
+        print(f"  Evolved agent wins: {wins_evolved} ({wins_evolved/num_games:.2%})")
+        print(f"  Baseline agent wins: {wins_baseline} ({wins_baseline/num_games:.2%})")
+        print(f"  Draws: {draws} ({draws/num_games:.2%})")
+
+        # Return results as dictionary with keys matching what main.py expects
+        return {
+            "games_played": num_games,
+            "evolved_wins": wins_evolved,
+            "evolved_win_rate": win_rate,
+            "baseline_wins": wins_baseline, 
+            "baseline_win_rate": baseline_win_rate,
+            "draws": draws,
+            "draw_rate": draw_rate
+        }
