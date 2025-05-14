@@ -65,7 +65,7 @@ def play_human_vs_agent(agent, human_player=1):
 
 def play_agent_vs_agent(agent1, agent2, num_games=10, print_boards=False):
     """
-    Play multiple games between two AI agents.
+    Play multiple games between two AI agents, alternating who goes first.
     
     Args:
         agent1: First AI agent
@@ -83,28 +83,34 @@ def play_agent_vs_agent(agent1, agent2, num_games=10, print_boards=False):
     for game_idx in range(num_games):
         game = Connect4Game()
         
+        # Alternate which agent goes first
+        agent1_plays_first = game_idx % 2 == 0
+        
         if print_boards:
             print(f"\nGame {game_idx + 1}")
+            print(f"{'Agent 1' if agent1_plays_first else 'Agent 2'} plays first")
             game.print_board()
         
         # Play until game over
         while not game.game_over:
+            current_agent = None
             if game.current_player == 1:  # First player's turn
-                move = agent1.choose_move(game)
+                current_agent = agent1 if agent1_plays_first else agent2
             else:  # Second player's turn
-                move = agent2.choose_move(game)
+                current_agent = agent2 if agent1_plays_first else agent1
             
+            move = current_agent.choose_move(game)
             game.make_move(move)
             
             if print_boards:
                 game.print_board()
         
-        # Record result
+        # Record result based on who played as which player
         if game.winner is None:
             draws += 1
             if print_boards:
                 print("Game ended in a draw")
-        elif game.winner == 1:
+        elif (game.winner == 1 and agent1_plays_first) or (game.winner == -1 and not agent1_plays_first):
             agent1_wins += 1
             if print_boards:
                 print("Agent 1 wins")
@@ -124,6 +130,7 @@ def play_agent_vs_agent(agent1, agent2, num_games=10, print_boards=False):
     }
     
     return stats
+
 
 def plot_board_heatmap(game, weights, title="Board Evaluation Heatmap"):
     """
