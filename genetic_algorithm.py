@@ -118,8 +118,8 @@ class GeneticAlgorithm:
     
     def tournament_selection(self, population, fitness_scores):
         """
-        Select an individual using tournament selection.
-        
+        Select an individual using random tournament selection.
+
         Args:
             population: List of individuals
             fitness_scores: List of fitness scores
@@ -148,6 +148,7 @@ class GeneticAlgorithm:
             child1 = {}
             child2 = {}
             
+            # Create children by mixing weights from both parents
             for key in parent1.keys():
                 if random.random() < 0.5:
                     child1[key] = parent1[key]
@@ -217,7 +218,7 @@ class GeneticAlgorithm:
             if len(new_population) < self.population_size:
                 new_population.append(child2)
                 
-        return new_population  # This line was missing
+        return new_population  
 
     def run(self):
         """
