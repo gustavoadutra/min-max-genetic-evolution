@@ -5,11 +5,12 @@ class MinMaxAgent:
     """
     Agent that uses Min-Max algorithm with Alpha-Beta pruning to play Connect-4.
     """
-    def __init__(self, evaluation_weights=None, max_depth=4):
+    def __init__(self, player_number=1, evaluation_weights=None, max_depth=4):
         """
         Initialize the Min-Max agent.
         
         Args:
+            player_number: Which player this agent is (1 or -1)
             evaluation_weights: Weights for the evaluation function features
             max_depth: Maximum search depth
         """
@@ -25,6 +26,7 @@ class MinMaxAgent:
             
         self.max_depth = max_depth
         self.nodes_evaluated = 0  # Counter for performance analysis
+        self.player_number = player_number  # Which player this agent is (1 or -1)
         
     def choose_move(self, game):
         """
@@ -32,7 +34,7 @@ class MinMaxAgent:
         
         Args:
             game: Current game state
-            
+
         Returns:
             The column to play in
         """
@@ -43,7 +45,10 @@ class MinMaxAgent:
             return None
         
         best_move = valid_moves[0]
-        best_value = -float('inf')
+        if game.current_player == 1:
+            best_value = -float('inf')
+        else:
+            best_value = float('inf')
         alpha = -float('inf')
         beta = float('inf')
         
@@ -52,16 +57,21 @@ class MinMaxAgent:
             # Create a copy of the game and make the move
             game_copy = game.clone()
             game_copy.make_move(move)
-            
-            # Get value from Min-Max
             value = self._min_value(game_copy, alpha, beta, 1)
-            
-            if value > best_value:
-                best_value = value
-                best_move = move
+            # Get value from Min-Max
+            if game.current_player == 1:
+                if value > best_value:
+                    best_value = value
+                    best_move = move
                 
-            alpha = max(alpha, best_value)
-            
+                alpha = max(alpha, best_value)
+            else: 
+                if value < best_value:
+                    best_value = value
+                    best_move = move
+                
+                beta = min(beta, best_value)
+
         return best_move
     
     def _max_value(self, game, alpha, beta, depth):
@@ -81,9 +91,9 @@ class MinMaxAgent:
         
         # Terminal test
         if game.game_over:
-            if game.winner == 1:  # AI wins
+            if game.winner == self.player_number:  # Agent wins
                 return 1000
-            elif game.winner == -1:  # Opponent wins
+            elif game.winner == -self.player_number:  # Opponent wins
                 return -1000
             else:  # Draw
                 return 0
@@ -126,9 +136,9 @@ class MinMaxAgent:
         
         # Terminal test
         if game.game_over:
-            if game.winner == 1:  # AI wins
+            if game.winner == self.player_number:  # Agent wins
                 return 1000
-            elif game.winner == -1:  # Opponent wins
+            elif game.winner == -self.player_number:  # Opponent wins
                 return -1000
             else:  # Draw
                 return 0
@@ -164,9 +174,9 @@ class MinMaxAgent:
         Returns:
             The evaluation score
         """
-        # For player 1 (maximizing player)
-        player = 1
-        opponent = -1
+        # For player according to agent's player number
+        player = self.player_number
+        opponent = -self.player_number
         
         # Feature 1: Open lines (rows, columns, diagonals) where player can still win
         open_lines_player = self._count_open_lines(game.board, player)

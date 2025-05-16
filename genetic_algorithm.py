@@ -109,10 +109,9 @@ class GeneticAlgorithm:
                 score += 3  # Win
         
         # Add a small regularization to avoid extreme weights
-        regularization = -0.01 * (abs(weights['open_lines']) + 
+        regularization = 0.01 * (abs(weights['open_lines']) + 
                                  abs(weights['three_in_a_row']) + 
                                  abs(weights['center_control']))
-        
         # Return combined fitness
         return score + regularization, wins
     
@@ -309,8 +308,8 @@ class GeneticAlgorithm:
         print(f"\nComparing evolved agent with baseline over {num_games} games...")
         
         # Create agents
-        evolved_agent = MinMaxAgent(evaluation_weights=best_weights, max_depth=3)
-        baseline_agent = MinMaxAgent(evaluation_weights=self.baseline_weights, max_depth=3)
+        evolved_agent = MinMaxAgent(evaluation_weights=best_weights, max_depth=4)
+        baseline_agent = MinMaxAgent(evaluation_weights=self.baseline_weights, max_depth=4)
         
         # Statistics
         wins_evolved = 0
