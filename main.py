@@ -225,8 +225,8 @@ def main():
         print(f"Draws: {comparison['draws']} ({comparison['draw_rate']:.2%})")
     
     # Create agents
-    evolved_agent = MinMaxAgent(evaluation_weights=best_weights, max_depth=4)
-    baseline_agent = MinMaxAgent(max_depth=4)  # Uses default weights
+    evolved_agent = MinMaxAgent(evaluation_weights=best_weights, max_depth=3)
+    baseline_agent = MinMaxAgent(max_depth=3)  # Uses default weights
     
     # Menu
     while True:

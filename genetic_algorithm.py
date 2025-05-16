@@ -73,10 +73,10 @@ class GeneticAlgorithm:
         from minmax_agent import MinMaxAgent
         
         # Create agent with the given weights
-        agent = MinMaxAgent(evaluation_weights=weights, max_depth=4)
+        agent = MinMaxAgent(evaluation_weights=weights, max_depth=3)
         
         # Create baseline agent
-        baseline_agent = MinMaxAgent(evaluation_weights=self.baseline_weights, max_depth=4)
+        baseline_agent = MinMaxAgent(evaluation_weights=self.baseline_weights, max_depth=3)
         
         # Play multiple games against the baseline agent
         num_games = 6  # 3 as first player, 3 as second player
@@ -308,8 +308,8 @@ class GeneticAlgorithm:
         print(f"\nComparing evolved agent with baseline over {num_games} games...")
         
         # Create agents
-        evolved_agent = MinMaxAgent(evaluation_weights=best_weights, max_depth=4)
-        baseline_agent = MinMaxAgent(evaluation_weights=self.baseline_weights, max_depth=4)
+        evolved_agent = MinMaxAgent(evaluation_weights=best_weights, max_depth=3)
+        baseline_agent = MinMaxAgent(evaluation_weights=self.baseline_weights, max_depth=3)
         
         # Statistics
         wins_evolved = 0
