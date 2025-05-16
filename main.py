@@ -142,7 +142,7 @@ def plot_board_heatmap(game, weights, title="Board Evaluation Heatmap"):
         title: Title for the plot
     """
     # Create an agent with given weights
-    agent = MinMaxAgent(evaluation_weights=weights, max_depth=3)
+    agent = MinMaxAgent(evaluation_weights=weights, max_depth=4)
     
     # Get valid moves
     valid_moves = game.get_valid_moves()

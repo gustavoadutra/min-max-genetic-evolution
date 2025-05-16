@@ -57,15 +57,17 @@ class MinMaxAgent:
             # Create a copy of the game and make the move
             game_copy = game.clone()
             game_copy.make_move(move)
-            value = self._min_value(game_copy, alpha, beta, 1)
             # Get value from Min-Max
             if game.current_player == 1:
+                value = self._min_value(game_copy, alpha, beta, 1)
+
                 if value > best_value:
                     best_value = value
                     best_move = move
                 
                 alpha = max(alpha, best_value)
             else: 
+                value = self._max_value(game_copy, alpha, beta, 1)
                 if value < best_value:
                     best_value = value
                     best_move = move
