@@ -77,24 +77,6 @@ Dependências (extraídas de requirements.txt)
 - python-dateutil==2.9.0.post0
 - six==1.17.0
 
-Notas de execução
-- O projeto usa processamento paralelo (ProcessPoolExecutor) para avaliar fitness de indivíduos em `genetic_algorithm.py`. Em alguns ambientes (Windows, ambientes restritos) isso pode requerer ajustes ou causar problemas se executado em notebooks; prefira rodar `python main.py` em um terminal.
-- A função de avaliação e o jogo assumem um tabuleiro de tamanho 5x5 e objetivo de conectar 4 peças em linha.
-
-Possíveis melhorias (sugestões)
-- Tornar os parâmetros configuráveis por linha de comando (argparse) ou por arquivo de configuração JSON/YAML.
-- Adicionar testes automatizados em `tests/` (unitários para contagem de features, lógica de vitória e operadores genéticos).
-- Separar a lógica de experimentos em scripts dentro de `examples/` para replicabilidade.
-- Adicionar CI (GitHub Actions) que execute linting e testes.
-
-Contribuição
-1. Faça fork do repositório.
-2. Crie uma branch com sua feature: `git checkout -b feature/descricao`.
-3. Abra um pull request descrevendo as mudanças e os motivos.
-
-Licença
-- Nenhuma licença foi adicionada ao repositório. Se desejar, posso criar um arquivo `LICENSE` (ex.: MIT). Indique qual licença prefere.
-
 Contatos
 - Autor: Gustavo Adutra (GitHub: @gustavoadutra)
 
